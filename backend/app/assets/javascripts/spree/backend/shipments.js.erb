@@ -253,37 +253,20 @@ completeItemSplit = function(event) {
       $.ajax({
         type: "POST",
         async: false,
-        url: Spree.url(Spree.routes.shipments_api + "/transfer_to_location"),
-        data: {
-            original_shipment_number: original_shipment_number,
-            variant_id: variant_id,
-            quantity: quantity,
-            stock_location_id: stock_location_id,
-            token: Spree.api_key
-        }
-      }).error(function(msg) {
-          alert(msg.responseJSON['message']);
+        url: Spree.url(Spree.routes.shipments_api + "?shipment[order_id]=" + order_number),
+        data: { variant_id: variant_id, quantity: quantity, stock_location_id: stock_location_id, token: Spree.api_key }
       }).done(function(msg) {
         window.Spree.advanceOrder();
       });
     } else {
-        // TRANSFER TO AN EXISTING SHIPMENT
-        $.ajax({
-            type: "POST",
-            async: false,
-            url: Spree.url(Spree.routes.shipments_api + "/transfer_to_shipment"),
-            data: {
-                original_shipment_number: original_shipment_number,
-                target_shipment_number: target_shipment_number,
-                variant_id: variant_id,
-                quantity: quantity,
-                token: Spree.api_key
-            }
-        }).error(function(msg) {
-            alert(msg.responseJSON['message']);
-        }).done(function(msg) {
-            window.Spree.advanceOrder();
-        });
+      $.ajax({
+        type: "PUT",
+        async: false,
+        url: Spree.url(Spree.routes.shipments_api + "/" + target_shipment_number + "/add.json"),
+        data: { variant_id: variant_id, quantity: quantity, token: Spree.api_key }
+      }).done(function(msg) {
+        advanceOrder();
+      });
     }
   }
 }

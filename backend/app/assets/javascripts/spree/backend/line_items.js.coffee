@@ -61,4 +61,4 @@ deleteLineItem = (line_item_id) ->
     $('#line-item-' + line_item_id).remove()
     if $('.line-items tr.line-item').length == 0
       $('.line-items').remove()
-    window.Spree.advanceOrder()
+    advanceOrder()

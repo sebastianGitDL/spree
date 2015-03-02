@@ -52,23 +52,4 @@ $(document).ready ->
               product.image = product.master.images[0].small_url
             el.append(productTemplate({ product: product }))
 
-  $('#taxon_products').on "click", ".js-delete-product", (e) ->
-    current_taxon_id = $("#taxon_id").val();
-    product = $(this).parents(".product")
-    product_id = product.data("product-id");
-    product_taxons = String(product.data("taxons")).split(',').map(Number);
-    product_index = product_taxons.indexOf(parseFloat(current_taxon_id));
-    product_taxons.splice(product_index, 1);
-    $.ajax
-      url: Spree.routes.products_api + "/" + product_id + "?product[taxon_ids]=" + product_taxons + '&token=' + Spree.api_key,
-      type: "PUT",
-      success: (data) ->
-        product.fadeOut 400, (e) ->
-          product.remove()
-
-  $('#taxon_products').on "click", ".js-edit-product", (e) ->
-    product = $(this).parents(".product")
-    product_id = product.data("product-id")
-    window.location = Spree.routes.edit_product(product_id)
-
-  $(".variant_autocomplete").variantAutocomplete();
+          $('#sorting_explanation').show()

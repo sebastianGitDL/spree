@@ -69,20 +69,20 @@ handle_delete = (e, data) ->
   node = data.rslt.obj
   delete_url = base_url.clone()
   delete_url.setPath delete_url.path() + '/' + node.prop("id")
-  response = confirm(Spree.translations.are_you_sure_delete)
-  if response
-    $.ajax
-      type: "POST",
-      dataType: "json",
-      url: delete_url.toString(),
-      data: {
-        _method: "delete",
-        token: Spree.api_key
-      },
-      error: handle_ajax_error
-  else
-    $.jstree.rollback(last_rollback)
-    last_rollback = null
+  jConfirm Spree.translations.are_you_sure_delete, Spree.translations.confirm_delete, (r) ->
+    if r
+      $.ajax
+        type: "POST",
+        dataType: "json",
+        url: delete_url.toString(),
+        data: {
+          _method: "delete",
+          token: Spree.api_key
+        },
+        error: handle_ajax_error
+    else
+      $.jstree.rollback(last_rollback)
+      last_rollback = null
 
 root = exports ? this
 root.setup_taxonomy_tree = (taxonomy_id) ->
